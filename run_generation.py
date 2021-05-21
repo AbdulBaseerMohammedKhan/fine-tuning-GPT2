@@ -191,7 +191,8 @@ def main():
     args.device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
     args.n_gpu = 0 if args.no_cuda else torch.cuda.device_count()
 
-    set_seed(args)
+    
+    K = args.k
 
     # Initialize the model and tokenizer
     try:
@@ -260,9 +261,15 @@ def main():
 
         generated_sequences.append(total_sequence)
         print(total_sequence)
+    with open('comments_seed_'+str(K)+'.txt', 'w') as f:
+      for comment in generated_sequences:
+        f.writelines('\n<new>\n')
+        f.writelines(comment[6:])
+        
 
     return generated_sequences
 
 
 if __name__ == "__main__":
     main()
+    
